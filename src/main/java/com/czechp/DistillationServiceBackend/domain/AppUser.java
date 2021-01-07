@@ -1,8 +1,9 @@
 package com.czechp.DistillationServiceBackend.domain;
 
+import com.czechp.DistillationServiceBackend.validator.annotation.PasswordValidator;
 import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Data;
-import lombok.Generated;
 import lombok.NoArgsConstructor;
 import org.hibernate.validator.constraints.Length;
 import org.springframework.security.core.GrantedAuthority;
@@ -21,6 +22,7 @@ import java.util.Collections;
 @Entity(name = "users")
 @AllArgsConstructor()
 @NoArgsConstructor()
+@Builder()
 @Data()
 public class AppUser implements UserDetails {
     @Id()
@@ -29,8 +31,10 @@ public class AppUser implements UserDetails {
     @NotNull(message = "Username cannot be null")
     @Length(min = 4, max = 20, message = "Length of username must be between 4-20 chars")
     private String username;
+    //todo: decrypt before saving
     @NotNull(message = "Password cannot be null")
     @Length(min = 4, max = 20, message = "Length of password must be between 4-20 chars")
+    @PasswordValidator()
     private String password;
     @Email(message = "It's not correct email format")
     private String email;
