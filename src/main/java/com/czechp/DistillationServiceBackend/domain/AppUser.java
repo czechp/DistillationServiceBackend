@@ -1,10 +1,11 @@
 package com.czechp.DistillationServiceBackend.domain;
 
-import com.czechp.DistillationServiceBackend.validator.annotation.PasswordValidator;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import org.apache.commons.lang3.builder.HashCodeBuilder;
 import org.hibernate.validator.constraints.Length;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
@@ -15,6 +16,7 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.validation.constraints.Email;
+import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
 import java.util.Collection;
 import java.util.Collections;
@@ -28,20 +30,32 @@ public class AppUser implements UserDetails {
     @Id()
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private long id;
+
     @NotNull(message = "Username cannot be null")
     @Length(min = 4, max = 20, message = "Length of username must be between 4-20 chars")
     private String username;
-    //todo: decrypt before saving
+
+    //
+//    Password should seems like:
+//    1.Minimum 4 characters
+//    2. Maximum 20 characters
+//    3. Contains minimum one number
+//    4. Contains minmum one upper cas
     @NotNull(message = "Password cannot be null")
-    @Length(min = 4, max = 20, message = "Length of password must be between 4-20 chars")
-    @PasswordValidator()
+    @NotBlank(message = "Password cannot be blank")
     private String password;
+
     @Email(message = "It's not correct email format")
+    @NotNull(message = "Email cannot be null")
     private String email;
 
     private String role;
 
+    @JsonIgnore()
     private boolean enabled;
+
+    @JsonIgnore()
+    private String activationToken;
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
@@ -50,12 +64,12 @@ public class AppUser implements UserDetails {
 
     @Override
     public String getPassword() {
-        return null;
+        return password;
     }
 
     @Override
     public String getUsername() {
-        return null;
+        return username;
     }
 
     @Override
@@ -76,5 +90,14 @@ public class AppUser implements UserDetails {
     @Override
     public boolean isEnabled() {
         return enabled;
+    }
+
+    @Override()
+    public int hashCode() {
+        return new HashCodeBuilder()
+                .append(username)
+                .append(password)
+                .append(email)
+                .toHashCode();
     }
 }

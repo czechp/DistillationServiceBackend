@@ -22,6 +22,8 @@ public class DevelopmentData {
     public void init() {
         log.info("<-------------------Starting development service------------------->");
         appUserDevelopment();
+        log.info("<-------------------End of development service------------------->");
+
     }
 
     private void appUserDevelopment() {
@@ -29,7 +31,7 @@ public class DevelopmentData {
                 .username("user")
                 .password("Codhaslo55")
                 .role(AppUserRole.USER.toString())
-                .email("webcoderc@gmail.com")
+                .email("webcoderc1231@gmail.com")
                 .enabled(true)
                 .build();
         appUserRepository.save(user);
