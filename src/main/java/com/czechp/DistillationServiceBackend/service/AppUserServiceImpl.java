@@ -65,6 +65,7 @@ public class AppUserServiceImpl implements AppUserService {
                 .append(request.getLocalPort())
                 .append("/api/activation?token=")
                 .append(appUser.getActivationToken())
+                .append("\nAfter 10 minutes without activating your account will removing")
                 .toString();
 
         HashMap<String, String> emailHashMap = new HashMap<>();
